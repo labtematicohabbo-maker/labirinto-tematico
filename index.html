@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Labirinto Temático - FAST, GUIA e PULO</title>
     <style>
         body {
@@ -11,6 +11,7 @@
             color: #f2f2f2;
             margin: 0;
             padding: 0;
+            overflow-x: hidden; /* evitar scroll horizontal */
         }
         header {
             background: linear-gradient(90deg, #5a0099, #8a00d4);
@@ -19,15 +20,26 @@
             color: white;
             font-size: 28px;
             font-weight: bold;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 0 15px #8a00d4;
         }
         .banner {
             width: 100%;
             max-height: 280px;
             object-fit: cover;
             display: block;
+            margin-top: 80px; /* para não ficar embaixo do header fixo */
+            border: 2px solid #8a00d4;
+            box-shadow: 0 0 15px #8a00d4;
+            border-radius: 6px;
         }
         .container {
             padding: 20px;
+            max-width: 800px;
+            margin: 20px auto;
         }
         h2 {
             color: #d28bff;
@@ -38,6 +50,7 @@
             padding: 15px;
             margin-bottom: 15px;
             border-radius: 6px;
+            box-shadow: 0 0 8px #8a00d4;
         }
         .pix-box {
             background-color: #262626;
@@ -46,6 +59,9 @@
             font-size: 18px;
             margin-top: 20px;
             text-align: center;
+            border-radius: 6px;
+            box-shadow: 0 0 12px #8a00d4;
+            position: relative;
         }
         footer {
             background-color: #111;
@@ -53,6 +69,117 @@
             padding: 15px;
             margin-top: 30px;
             color: #666;
+            border-top: 1px solid #8a00d4;
+        }
+
+        /* Papai Noel animado */
+        #papai-noel {
+            position: fixed;
+            top: 10px;
+            left: -150px;
+            width: 120px;
+            z-index: 1100;
+            animation: voaNoel 20s linear infinite;
+            pointer-events: none; /* para não atrapalhar cliques */
+        }
+
+        @keyframes voaNoel {
+            0% {
+                left: -150px;
+                top: 10px;
+                transform: rotate(0deg);
+            }
+            50% {
+                top: 30px;
+                transform: rotate(10deg);
+            }
+            100% {
+                left: 100vw;
+                top: 10px;
+                transform: rotate(0deg);
+            }
+        }
+
+        /* Botões */
+        button {
+            background-color: #8a00d4;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 6px;
+            box-shadow: 0 0 8px #8a00d4;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #5a0099;
+        }
+
+        /* Link do grupo e discord */
+        .links {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .links a {
+            color: #d28bff;
+            font-weight: bold;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Aviso animado */
+        .aviso {
+            margin-top: 20px;
+            padding: 15px;
+            background: linear-gradient(270deg, #8a00d4, #d28bff, #8a00d4);
+            background-size: 600% 600%;
+            animation: gradiente 8s ease infinite;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 0 15px #d28bff;
+        }
+        @keyframes gradiente {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+
+        /* Versão mobile */
+        @media(max-width: 600px) {
+            header {
+                font-size: 20px;
+                padding: 15px;
+            }
+            .banner {
+                max-height: 180px;
+            }
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+            button {
+                width: 100%;
+                padding: 15px;
+                font-size: 16px;
+            }
+            .produto {
+                font-size: 16px;
+            }
+            .pix-box {
+                font-size: 16px;
+            }
+            #papai-noel {
+                width: 80px;
+                top: 5px;
+                animation: voaNoel 15s linear infinite;
+            }
         }
     </style>
 </head>
@@ -60,7 +187,10 @@
 
 <header>Labirinto Temático — Vendas Oficiais</header>
 
-<img src="images/labirinto-banner.png" alt="Banner Labirinto" class="banner">
+<img src="images/labirinto-banner.png" alt="Banner Labirinto" class="banner" />
+
+<!-- Papai Noel animado -->
+<img src="images/papainoel.png" alt="Papai Noel voando" id="papai-noel" />
 
 <div class="container">
     <h2>Bem-vindo ao Labirinto Temático!</h2>
@@ -78,12 +208,34 @@
     <div class="produto"><strong>4 FAST + Pulo + Guia (combo completo):</strong> R$ 26</div>
 
     <div class="pix-box">
-        <strong>PIX para pagamento:</strong><br>
+        <strong>PIX para pagamento:</strong><br />
         Labtematicohabbo@gmail.com
+        <br />
+        <button id="btn-copy">Copiar PIX</button>
+        <div class="links">
+            <a href="https://discord.gg/MTVFbx3j" target="_blank" rel="noopener">Entrar no Discord</a> | 
+            <a href="https://www.habbo.com.br/room/153097421" target="_blank" rel="noopener">Grupo das Fases</a>
+        </div>
+    </div>
+
+    <div class="aviso">
+        Após o pagamento, entre nos grupos da fase inicial e envie o comprovante com seu nick no discord Labtematico
     </div>
 </div>
 
 <footer>© 2025 - Loja Labirinto Temático</footer>
+
+<script>
+    // Função copiar PIX
+    document.getElementById('btn-copy').addEventListener('click', () => {
+        const pix = 'Labtematicohabbo@gmail.com';
+        navigator.clipboard.writeText(pix).then(() => {
+            alert('PIX copiado para a área de transferência!');
+        }).catch(() => {
+            alert('Erro ao copiar PIX. Tente copiar manualmente.');
+        });
+    });
+</script>
 
 </body>
 </html>
